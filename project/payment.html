@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ชำระเงิน | Family Car Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background: radial-gradient(circle at top right, #1e293b, #0f172a, #000000);
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .method-card {
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .method-card.active {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .qr-container {
+            background: white;
+            padding: 20px;
+            border-radius: 24px;
+        }
+    </style>
+</head>
+
+<body class="p-4 md:p-8">
+
+    <nav>
+        <div>
+            <a href="store.html">
+                <i class="fas fa-arrow-left"></i> กลับสู่หน้าร้านค้า
+            </a>
+        </div>
+    </nav>
+
+
+    <div class="max-w-4xl mx-auto">
+        <header class="flex items-center justify-between mb-8">
+            <div class="flex items-center gap-4">
+                <a href="store.html"
+                    class="w-10 h-10 glass rounded-full flex items-center justify-center hover:bg-white/10 text-white transition">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <h1 class="text-2xl md:text-3xl font-bold">ชำระเงินค่ามัดจำ</h1>
+            </div>
+            <a href="store.html" class="text-sm text-gray-400 hover:text-blue-400 transition flex items-center gap-2">
+                <i class="fas fa-car"></i> กลับไปเลือกหน้าแรก
+            </a>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 space-y-6">
+                <section class="glass rounded-3xl p-6">
+                    <h2 class="text-xl font-semibold mb-4 text-blue-400">เลือกช่องทางการชำระเงิน</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div onclick="selectMethod('bank')" id="method-bank"
+                            class="method-card glass p-4 rounded-2xl flex items-center gap-4 active border-blue-500 bg-blue-500/10">
+                            <div
+                                class="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center text-blue-400">
+                                <i class="fas fa-university text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-sm text-white">โอนผ่าน PromptPay</p>
+                                <p class="text-xs text-gray-400">ตรวจสอบสลิปอัตโนมัติ</p>
+                            </div>
+                        </div>
+                        <div onclick="selectMethod('card')" id="method-card"
+                            class="method-card glass p-4 rounded-2xl flex items-center gap-4 opacity-50 cursor-not-allowed">
+                            <div
+                                class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center text-purple-400">
+                                <i class="fas fa-credit-card text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-sm text-white">บัตรเครดิต (ไม่พร้อมใช้)</p>
+                                <p class="text-xs text-gray-400">ขออภัยในความไม่สะดวก</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="bank-details" class="glass rounded-3xl p-6">
+                    <h2 class="text-xl font-semibold mb-4 text-blue-400 font-bold text-center">2. สแกนเพื่อโอนเงิน</h2>
+
+                    <div class="qr-container flex flex-col items-center mb-6 border-4 border-blue-500/20 shadow-2xl">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/PromptPay-logo.png"
+                            class="h-10 mb-4" alt="PromptPay">
+
+                        <div class="bg-white p-2 border-2 border-blue-50 rounded-xl mb-4">
+                            <img src="004999140533588_20251219_204332 (2).jpeg" alt="สแกนจ่าย" class="bank-qr">
+                        </div>
+
+                        <div class="text-center">
+                            <div class="mt-3 px-4 py-1 bg-red-100 text-red-600 text-xs rounded-full font-bold">
+                                ยอดที่ต้องชำระ: 50,000.00 บาท
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <label class="block text-sm text-gray-400 font-medium ml-1">อัปโหลดสลิปที่โอนสำเร็จ</label>
+                        <div
+                            class="relative h-44 glass border-2 border-dashed border-white/10 rounded-2xl flex flex-col items-center justify-center group overflow-hidden hover:border-blue-500/50 transition-all">
+                            <input type="file" id="slipInput" onchange="validateSlip(this)"
+                                class="absolute inset-0 opacity-0 cursor-pointer z-10">
+                            <i class="fas fa-file-upload text-3xl text-gray-500 group-hover:text-blue-400 mb-2"></i>
+                            <p class="text-sm text-gray-400" id="fileName">คลิกเลือกรูปภาพสลิป</p>
+                            <img id="preview" class="absolute inset-0 w-full h-full object-contain bg-[#0f172a] hidden">
+                        </div>
+                        <div id="alertMsg"
+                            class="hidden p-4 rounded-xl bg-red-500/20 border border-red-500/50 text-red-400 text-sm text-center">
+                            <i class="fas fa-exclamation-triangle mr-2"></i> สลิปไม่ถูกต้อง หรือไฟล์ไม่ใช่รูปภาพ
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="space-y-6">
+                <section class="glass rounded-3xl p-6 sticky top-8">
+                    <h2 class="text-xl font-semibold mb-4">สรุปการจอง</h2>
+                    <div class="flex gap-4 mb-4">
+                        <img src="https://images.unsplash.com/photo-1592198084033-aade902d1aae?w=200"
+                            class="w-20 h-20 rounded-xl object-cover">
+                        <div>
+                            <p class="font-bold text-sm">Ferrari 12 Cilindri</p>
+                            <p class="text-xs text-gray-400">จองมัดจำออนไลน์</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 border-t border-white/10 pt-4">
+                        <div class="flex justify-between text-sm text-gray-400">
+                            <span>ราคารถ</span>
+                            <span>฿25,900,000</span>
+                        </div>
+                        <div
+                            class="flex justify-between text-lg font-bold text-emerald-400 mt-4 pt-4 border-t border-white/10">
+                            <span>ยอดมัดจำที่ต้องจ่าย</span>
+                            <span>฿50,000.00</span>
+                        </div>
+                    </div>
+
+                    <button onclick="confirmPayment()" id="payBtn"
+                        class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-2xl mt-8 shadow-lg shadow-blue-600/30 transition duration-300 transform hover:-translate-y-1">
+                        ยืนยันการชำระเงิน
+                    </button>
+
+                    <a href="store.html"
+                        class="block text-center w-full mt-4 text-gray-500 hover:text-red-400 text-sm transition">
+                        ยกเลิกการชำระเงิน
+                    </a>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data-manager.js"></script>
+    <script>
+        const dm = window.dataManager;
+        const products = dm.getProducts();
+
+        // 1. Load Product Details
+        const urlParams = new URLSearchParams(window.location.search);
+        const carId = urlParams.get('id');
+        let currentCar = null;
+
+        if (carId && products[carId]) {
+            currentCar = products[carId];
+            document.querySelector('.space-y-6 img').src = currentCar.img;
+            document.querySelectorAll('.font-bold.text-sm')[0].innerText = currentCar.name;
+
+            // Format Price
+            const price = Number(currentCar.price);
+            const deposit = 50000;
+            document.querySelectorAll('.flex.justify-between span')[1].innerText = '฿' + price.toLocaleString();
+            document.querySelectorAll('.flex.justify-between span')[3].innerText = '฿' + deposit.toLocaleString();
+        } else {
+            alert("ไม่พบข้อมูลสินค้า");
+            window.location.href = 'store.html';
+        }
+
+        let isSlipValid = false;
+        let currentSlipBase64 = null;
+
+        function validateSlip(input) {
+            const file = input.files[0];
+            const alertMsg = document.getElementById('alertMsg');
+            const preview = document.getElementById('preview');
+            const fileName = document.getElementById('fileName');
+
+            if (file) {
+                const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+                if (!validTypes.includes(file.type) || file.size < 1000) { // Changed min size
+                    alertMsg.classList.remove('hidden');
+                    isSlipValid = false;
+                    preview.classList.add('hidden');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    currentSlipBase64 = e.target.result; // Store Base64
+                    preview.classList.remove('hidden');
+                    fileName.classList.add('hidden');
+                }
+                reader.readAsDataURL(file);
+                alertMsg.classList.add('hidden');
+                isSlipValid = true;
+            }
+        }
+
+        function confirmPayment() {
+            if (!isSlipValid) {
+                alert("กรุณาอัปโหลดสลิปโอนเงินที่ถูกต้องก่อนครับ");
+                return;
+            }
+
+            // Generate Order
+            const currentUser = dm.getCurrentUser();
+            if (!currentUser) {
+                alert("กรุณาเข้าสู่ระบบก่อนชำระเงิน");
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const btn = document.getElementById('payBtn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ระบบกำลังตรวจสอบ...';
+            btn.disabled = true;
+
+            try {
+                dm.saveOrder({
+                    productId: carId,
+                    productName: currentCar.name,
+                    price: currentCar.price,
+                    userId: currentUser.email, // Use email as ID for simple match
+                    userName: currentUser.name,
+                    status: 'pending',
+                    slip: currentSlipBase64 // Real Base64
+                });
+
+                setTimeout(() => {
+                    alert("ชำระเงินสำเร็จ! ขอบคุณที่ไว้ใจ Family Car Premium");
+                    window.location.href = 'profile.html';
+                }, 1500);
+
+            } catch (e) {
+                alert("เกิดข้อผิดพลาด: " + e.message);
+                btn.disabled = false;
+            }
+        }
+
+        function selectMethod(method) {
+            if (method === 'card') {
+                alert('ระบบชำระผ่านบัตรเครดิตปิดปรับปรุงชั่วคราว กรุณาใช้ PromptPay ครับ');
+            }
+        }
+    </script>
+</body>
+
+</html>

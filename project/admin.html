@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Family Car</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background: radial-gradient(circle at top right, #1e293b, #0f172a, #000000);
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-link:hover {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+        }
+
+        .active-link {
+            background: rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+            border-right: 4px solid #60a5fa;
+        }
+    </style>
+</head>
+
+<body class="flex">
+
+    <aside class="w-64 glass h-screen sticky top-0 flex flex-col">
+        <div class="p-6">
+            <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">
+                ADMIN PANEL
+            </h1>
+        </div>
+
+        <nav class="flex-1 px-4 space-y-2">
+            <a href="#" onclick="showSection('users')" class="sidebar-link flex items-center p-3 rounded-xl transition">
+                <i class="fas fa-users w-8"></i> จัดการผู้ใช้
+            </a>
+            <a href="#" onclick="showSection('orders')"
+                class="sidebar-link flex items-center p-3 rounded-xl transition">
+                <i class="fas fa-shopping-cart w-8"></i> รายการจองรถ
+            </a>
+            <a href="#" onclick="showSection('products')"
+                class="sidebar-link flex items-center p-3 rounded-xl transition">
+                <i class="fas fa-car w-8"></i> จัดการสินค้า
+            </a>
+            <a href="#" onclick="showSection('categories')"
+                class="sidebar-link flex items-center p-3 rounded-xl transition">
+                <i class="fas fa-list w-8"></i> จัดการหมวดหมู่
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-white/10">
+            <a href="store.html"
+                class="block w-full mb-2 text-sm text-center text-blue-400 hover:text-white transition py-2 rounded-lg hover:bg-white/5">
+                <i class="fas fa-home mr-1"></i> กลับหน้าร้านค้า
+            </a>
+            <button onclick="exportData()" class="w-full mb-2 text-sm text-gray-400 hover:text-white transition">
+                <i class="fas fa-download mr-1"></i> Backup ข้อมูล
+            </button>
+            <button onclick="logout()"
+                class="w-full bg-red-500/20 hover:bg-red-500 text-red-400 hover:text-white py-2 rounded-lg transition">
+                ออกจากระบบ
+            </button>
+        </div>
+
+
+
+    </aside>
+
+    <main class="flex-1 p-8 overflow-y-auto">
+        <header class="flex justify-between items-center mb-8">
+            <h2 id="section-title" class="text-3xl font-bold text-white">จัดการผู้ใช้</h2>
+            <div class="flex gap-4">
+                <input type="file" id="importFile" onchange="importData(event)" class="hidden">
+                <button onclick="document.getElementById('importFile').click()"
+                    class="glass px-4 py-2 rounded-lg text-sm">
+                    <i class="fas fa-upload mr-2"></i>นำเข้าข้อมูล
+                </button>
+            </div>
+        </header>
+
+        <div id="users-section" class="section-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        </div>
+
+        <div id="orders-section" class="section-content hidden space-y-4">
+        </div>
+
+        <div id="installments-section" class="section-content hidden space-y-4">
+        </div>
+
+        <div id="pending-section" class="section-content hidden grid grid-cols-1 md:grid-cols-2 gap-6">
+        </div>
+
+        <div id="pending-section" class="section-content hidden grid grid-cols-1 md:grid-cols-2 gap-6">
+        </div>
+
+        <div id="categories-section" class="section-content hidden">
+            <div class="glass p-6 rounded-2xl mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-blue-400">เพิ่ม/แก้ไขหมวดหมู่</h3>
+                    <button onclick="restoreCategories()" type="button"
+                        class="text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 px-3 py-1 rounded-lg transition">
+                        <i class="fas fa-undo mr-1"></i> คืนค่าเริ่มต้น
+                    </button>
+                </div>
+                <form id="category-form" class="grid grid-cols-1 gap-4">
+                    <input type="hidden" id="cat-id">
+                    <input type="text" id="cat-name" placeholder="ชื่อหมวดหมู่ (เช่น Ferrari)"
+                        class="bg-white/5 border border-white/10 p-3 rounded-lg text-white" required>
+                    <button type="submit"
+                        class="bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-xl font-bold transition">
+                        บันทึกหมวดหมู่
+                    </button>
+                </form>
+            </div>
+            <div id="category-list" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            </div>
+        </div>
+
+        <div id="products-section" class="section-content hidden">
+            <div class="glass p-6 rounded-2xl mb-8">
+                <h3 class="text-xl font-bold mb-4 text-blue-400">เพิ่ม/แก้ไขข้อมูลรถ</h3>
+                <form id="product-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="hidden" id="edit-id">
+                    <input type="text" id="p-name" placeholder="ชื่อรุ่นรถ (เช่น Ferrari 488)"
+                        class="bg-white/5 border border-white/10 p-3 rounded-lg" required>
+                    <input type="text" id="p-price" placeholder="ราคา (เช่น 25,000,000)"
+                        class="bg-white/5 border border-white/10 p-3 rounded-lg" required>
+                    <input type="text" id="p-img" placeholder="URL รูปภาพสินค้า"
+                        class="bg-white/5 border border-white/10 p-3 rounded-lg" required>
+                    <input type="text" id="p-id" placeholder="ID สำหรับ URL (เช่น ferrari-488)"
+                        class="bg-white/5 border border-white/10 p-3 rounded-lg text-white" required>
+                    <select id="p-category" class="bg-white/5 border border-white/10 p-3 rounded-lg text-white">
+                        <option value="" class="text-black">เลือกหมวดหมู่</option>
+                    </select>
+                    <textarea id="p-desc" placeholder="รายละเอียดสินค้า"
+                        class="bg-white/5 border border-white/10 p-3 rounded-lg md:col-span-2" rows="3"></textarea>
+                    <button type="submit"
+                        class="md:col-span-2 bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-xl font-bold transition">
+                        บันทึกข้อมูลสินค้า
+                    </button>
+                </form>
+            </div>
+
+            <div id="product-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            </div>
+        </div>
+    </main>
+
+    <!-- User Edit Modal -->
+    <div id="userEditModal"
+        class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
+        <div class="glass p-8 rounded-3xl w-full max-w-md mx-4">
+            <h3 class="text-2xl font-bold mb-6 text-white">แก้ไขข้อมูลผู้ใช้</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-gray-400 text-sm">อีเมล (ID)</label>
+                    <input type="text" id="u-email"
+                        class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-gray-500 mt-1 cursor-not-allowed"
+                        readonly>
+                </div>
+                <div>
+                    <label class="text-gray-400 text-sm">ชื่อจริง</label>
+                    <input type="text" id="u-name"
+                        class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white mt-1 focus:border-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="text-gray-400 text-sm">นามสกุล</label>
+                    <input type="text" id="u-lastname"
+                        class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white mt-1 focus:border-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="text-gray-400 text-sm">เบอร์โทรศัพท์</label>
+                    <input type="tel" id="u-phone"
+                        class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white mt-1 focus:border-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="text-gray-400 text-sm">ที่อยู่</label>
+                    <textarea id="u-address" rows="2"
+                        class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white mt-1 focus:border-blue-500 outline-none"></textarea>
+                </div>
+                <div>
+                    <label class="text-gray-400 text-sm">เปลี่ยนรหัสผ่าน (เว้นว่างหากไม่เปลี่ยน)</label>
+                    <input type="password" id="u-password" placeholder="ตั้งรหัสผ่านใหม่"
+                        class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white mt-1 focus:border-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="text-gray-400 text-sm">บทบาท (Role)</label>
+                    <select id="u-role"
+                        class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white mt-1 focus:border-blue-500 outline-none">
+                        <option value="user" class="text-black">User</option>
+                        <option value="admin" class="text-black">Admin</option>
+                    </select>
+                </div>
+
+                <div class="flex gap-4 pt-4">
+                    <button onclick="closeUserEditModal()"
+                        class="flex-1 py-3 rounded-xl border border-white/10 hover:bg-white/5 text-gray-300 transition">ยกเลิก</button>
+                    <button onclick="saveUserChanges()"
+                        class="flex-1 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition shadow-lg shadow-blue-600/20">บันทึก</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data-manager.js"></script>
+    <script>
+        // Initialize DataManager (already global as window.dataManager)
+        const dm = window.dataManager;
+
+        // Check Admin Login
+        const currentUser = dm.getCurrentUser();
+        if (!currentUser || currentUser.role !== 'admin') {
+            alert("กรุณาเข้าสู่ระบบในฐานะ Admin");
+            window.location.href = "index.html";
+        }
+
+        // Display Admin Name
+        // document.getElementById('admin-name').innerText = currentUser.name; // If there was an element
+
+        function logout() {
+            dm.logout();
+            window.location.href = "index.html";
+        }
+
+        // Navigation
+        function showSection(id) {
+            document.querySelectorAll('.section-content').forEach(s => s.classList.add('hidden'));
+            document.getElementById(id + '-section').classList.remove('hidden');
+
+            // Update Active Link
+            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active-link'));
+            // Find link (heuristic matching)
+            // Ignoring for now or adds logic if needed
+
+            // Initial load for section
+            if (id === 'products') { loadProducts(); updateCategorySelect(); }
+            if (id === 'users') loadUsers();
+            if (id === 'orders') loadOrders();
+            if (id === 'categories') loadCategories();
+        }
+
+        // ================== USER MANAGEMENT ==================
+        function loadUsers() {
+            const users = dm.getUsers();
+            const container = document.getElementById('users-section');
+
+            container.innerHTML = users.map(u => `
+            <div class="glass p-6 rounded-2xl flex flex-col gap-3 relative group">
+                <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition">
+                    <button onclick="openUserEditModal('${u.email}')" class="text-blue-400 hover:text-white bg-blue-500/10 hover:bg-blue-500 p-2 rounded-lg transition"><i class="fas fa-edit"></i></button>
+                    <button onclick="deleteUser('${u.email}')" class="text-red-400 hover:text-white bg-red-500/10 hover:bg-red-500 p-2 rounded-lg transition"><i class="fas fa-trash"></i></button>
+                </div>
+                <div class="flex items-center gap-4 border-b border-white/10 pb-4">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center text-xl font-bold">
+                        ${u.name.charAt(0)}
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg text-white">${u.name} ${u.lastname || ''}</h4>
+                        <p class="text-xs text-blue-400 uppercase tracking-wider">${u.role}</p>
+                    </div>
+                </div>
+                <div class="space-y-2 text-sm text-gray-400">
+                    <p><i class="fas fa-envelope w-6 text-center"></i> ${u.email}</p>
+                    <p><i class="fas fa-phone w-6 text-center"></i> ${u.phone || '-'}</p>
+                    <p class="truncate"><i class="fas fa-map-marker-alt w-6 text-center"></i> ${u.address || '-'}</p>
+                </div>
+                <div class="mt-2 text-xs text-gray-500 text-right">
+                    Joined: ${new Date(u.joinedDate).toLocaleDateString()}
+                </div>
+            </div>
+        `).join("");
+        }
+
+        // ================== USER EDIT MODAL LOGIC ==================
+        const userEditModal = document.getElementById('userEditModal'); // Ensure we add this HTML
+        let currentEditEmail = null;
+
+        function openUserEditModal(email) {
+            const users = dm.getUsers();
+            const user = users.find(u => u.email === email);
+            if (!user) return;
+
+            currentEditEmail = email;
+            document.getElementById('u-email').value = user.email; // Read-only usually
+            document.getElementById('u-name').value = user.name;
+            document.getElementById('u-lastname').value = user.lastname || '';
+            document.getElementById('u-lastname').value = user.lastname || '';
+            document.getElementById('u-phone').value = user.phone || '';
+            document.getElementById('u-address').value = user.address || '';
+            document.getElementById('u-role').value = user.role;
+            document.getElementById('u-password').value = ''; // Reset password field
+
+            document.getElementById('userEditModal').classList.remove('hidden');
+        }
+
+        function closeUserEditModal() {
+            document.getElementById('userEditModal').classList.add('hidden');
+            currentEditEmail = null;
+        }
+
+        function saveUserChanges() {
+            if (!currentEditEmail) return;
+
+            const updatedData = {
+                name: document.getElementById('u-name').value,
+                lastname: document.getElementById('u-lastname').value,
+                name: document.getElementById('u-name').value,
+                lastname: document.getElementById('u-lastname').value,
+                phone: document.getElementById('u-phone').value,
+                address: document.getElementById('u-address').value,
+                role: document.getElementById('u-role').value
+            };
+
+            const newPassword = document.getElementById('u-password').value;
+            if (newPassword && newPassword.trim() !== "") {
+                updatedData.password = newPassword.trim();
+            }
+
+            try {
+                dm.updateUserByEmail(currentEditEmail, updatedData);
+                alert('อัปเดตข้อมูลผู้ใช้สำเร็จ');
+                closeUserEditModal();
+                loadUsers();
+            } catch (e) {
+                alert('เกิดข้อผิดพลาด: ' + e.message);
+            }
+        }
+
+        function deleteUser(email) {
+            if (email === currentUser.email) {
+                alert("ไม่สามารถลบบัญชีตัวเองได้ขณะล็อกอิน");
+                return;
+            }
+            if (!confirm(`ยืนยันการลบผู้ใช้ ${email}? การกระทำนี้ไม่สามารถย้อนกลับได้`)) return;
+
+            if (dm.deleteUser(email)) {
+                alert("ลบผู้ใช้เรียบร้อยแล้ว");
+                loadUsers();
+            } else {
+                alert("เกิดข้อผิดพลาดในการลบ");
+            }
+        }
+
+        // ================== ORDER MANAGEMENT ==================
+        function loadOrders() {
+            const orders = dm.getOrders();
+            const users = dm.getUsers(); // Fetch users to cross-reference address
+            const container = document.getElementById('orders-section');
+
+            if (orders.length === 0) {
+                container.innerHTML = '<p class="text-gray-400">ยังไม่มีรายการจอง</p>';
+                return;
+            }
+
+            container.innerHTML = orders.map(o => {
+                // Find user for this order
+                const user = users.find(u => u.email === o.userId) || {};
+                const userAddress = user.address || 'ไม่ระบุที่อยู่';
+
+                return `
+            <div class="glass p-4 rounded-xl flex justify-between items-center">
+                <div>
+                    <p class="font-bold text-white">${o.productName}</p>
+                    <p class="text-xs text-gray-400">Booking ID: ${o.id}</p>
+                    <p class="text-xs text-gray-400">User: ${o.userName} (${o.userId})</p>
+                    <p class="text-xs text-blue-300"><i class="fas fa-map-marker-alt mr-1"></i> ที่อยู่: ${userAddress}</p>
+                    <p class="text-xs text-gray-500">${new Date(o.date).toLocaleString()}</p>
+                </div>
+                <div class="text-right">
+                    <p class="font-bold text-emerald-400">Deposit: ฿50,000</p>
+                    <span class="px-2 py-1 rounded text-xs ${o.status === 'pending' ? 'bg-yellow-500/20 text-yellow-500' : 'bg-green-500/20 text-green-500'}">
+                        ${o.status.toUpperCase()}
+                    </span>
+                    <button onclick="viewSlip('${o.id}')" class="block mt-2 text-xs text-blue-400 hover:text-blue-300 underline bg-transparent border-0 cursor-pointer w-full text-right">
+                        ดูสลิปโอนเงิน
+                    </button>
+                    ${o.status === 'pending' ? `
+                        <div class="flex justify-end gap-2 mt-2">
+                             <button onclick="rejectOrder('${o.id}')" class="bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white px-3 py-1 rounded text-xs transition">ยกเลิก</button>
+                             <button onclick="approveOrder('${o.id}')" class="bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white px-3 py-1 rounded text-xs transition">ยืนยัน</button>
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+            }).join("");
+        }
+
+        function viewSlip(orderId) {
+            const orders = dm.getOrders();
+            const order = orders.find(o => o.id === orderId);
+            if (order) {
+                // For now, using a placeholder because we didn't actually upload Base64 to localStorage (limitations).
+                // In a real app, 'order.slip' would be the URL or Base64.
+                // Using the demo image for now as requested by user verification context "User uploaded 1 image".
+                const slipUrl = order.slip === 'uploaded' ? 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=500' : order.slip;
+
+                // Show Modal (Create one dynamically or use existing structure if we made one for products)
+                const modalHtml = `
+                    < div id = "slipModal" class="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-[60] p-4" onclick = "this.remove()" >
+                        <div class="relative max-w-lg w-full">
+                            <img src="${slipUrl}" class="w-full rou nded-xl shadow-2xl border border-white/10">
+                                <p class="text-center text-white mt-4">คลิกที่ว่างเพื่อปิด</p>
+                        </div>
+                    </div >
+                    `;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+            }
+        }
+
+        function approveOrder(orderId) {
+            if (!confirm('ยืนยันยอดเงินถูกต้อง?')) return;
+
+            try {
+                dm.updateOrder(orderId, { status: 'paid' });
+                alert('อนุมัติยอดเงินเรียบร้อยแล้ว');
+                loadOrders();
+            } catch (e) {
+                alert('เกิดข้อผิดพลาด: ' + e.message);
+            }
+        }
+
+
+        // ================== PRODUCT MANAGEMENT ==================
+
+        function loadProducts() {
+            const products = dm.getProducts();
+            const list = document.getElementById("product-list");
+
+            list.innerHTML = Object.keys(products).map(id => {
+                const p = products[id];
+                return `
+                    <div class="glass p-4 rounded-2xl flex gap-4 items-center" >
+                        <img src="${p.img}" class="w-24 h-24 object-cover rounded-xl" onerror="this.src='https://via.placeholder.com/150'">
+                            <div class="flex-1">
+                                <h4 class="font-bold text-white">${p.name}</h4>
+                                <p class="text-xs text-blue-300 mb-1">${p.category || 'Uncategorized'}</p>
+                                <p class="text-emerald-400 text-sm">฿${Number(p.price).toLocaleString()}</p>
+                                <p class="text-gray-500 text-xs truncate w-40">${p.desc}</p>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <button onclick="editProduct('${id}')" class="text-blue-400 hover:text-blue-300"><i class="fas fa-edit"></i></button>
+                                <button onclick="deleteProduct('${id}')" class="text-red-400 hover:text-red-300"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+            `;
+            }).join("");
+        }
+
+        document.getElementById("product-form").addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const id = document.getElementById("p-id").value;
+            const newProduct = {
+                name: document.getElementById("p-name").value,
+                price: document.getElementById("p-price").value.replace(/,/g, ''), // Remove commas
+                img: document.getElementById("p-img").value,
+                desc: document.getElementById("p-desc").value,
+                category: document.getElementById("p-category").value
+            };
+
+            dm.saveProduct(id, newProduct);
+
+            alert("บันทึกข้อมูลรถเรียบร้อยแล้ว!");
+            document.getElementById("product-form").reset();
+            loadProducts();
+        });
+
+        function deleteProduct(id) {
+            if (!confirm("ยืนยันการลบรถรุ่นนี้ออกจากร้านค้า?")) return;
+            dm.deleteProduct(id);
+            loadProducts();
+        }
+
+        function editProduct(id) {
+            const products = dm.getProducts();
+            const p = products[id];
+
+            if (p) {
+                document.getElementById("p-id").value = id;
+                document.getElementById("p-name").value = p.name;
+                document.getElementById("p-price").value = p.price;
+                document.getElementById("p-img").value = p.img;
+                document.getElementById("p-desc").value = p.desc;
+                document.getElementById("p-category").value = p.category || '';
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // ================== CATEGORY MANAGEMENT ==================
+        function loadCategories() {
+            const categories = dm.getCategories();
+            const list = document.getElementById("category-list");
+
+            if (categories.length === 0) {
+                list.innerHTML = '<p class="text-gray-400">ยังไม่มีหมวดหมู่</p>';
+                return;
+            }
+
+            list.innerHTML = categories.map(c => `
+                <div class="glass p-4 rounded-xl flex justify-between items-center">
+                    <span class="text-white font-bold">${c.name}</span>
+                    <div>
+                         <button onclick="editCategory('${c.id}')" class="text-blue-400 hover:text-white mr-2"><i class="fas fa-edit"></i></button>
+                         <button onclick="deleteCategory('${c.id}')" class="text-red-400 hover:text-white"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        document.getElementById("category-form").addEventListener("submit", (e) => {
+            e.preventDefault();
+            const id = document.getElementById("cat-id").value;
+            const name = document.getElementById("cat-name").value;
+
+            // Simple ID generation if empty (for new) or use name as ID if we want simple
+            // But let's stick to what data-manager handles or pass null ID for new
+            const categoryData = {
+                name: name
+            };
+            if (id) categoryData.id = id;
+
+            dm.saveCategory(categoryData);
+            alert("บันทึกหมวดหมู่เรียบร้อย");
+            document.getElementById("category-form").reset();
+            document.getElementById("cat-id").value = ""; // Clear hidden ID
+            loadCategories();
+            updateCategorySelect(); // Refresh dropdown in product form
+        });
+
+        function deleteCategory(id) {
+            if (!confirm("ยืนยันการลบหมวดหมู่นี้?")) return;
+            dm.deleteCategory(id);
+            loadCategories();
+            updateCategorySelect();
+        }
+
+        function restoreCategories() {
+            if (!confirm("คุณต้องการคืนค่าหมวดหมู่เริ่มต้น (Ferrari, Nissan, Toyota) หรือไม่?")) return;
+
+            const defaults = [
+                { id: 'Ferrari', name: 'Ferrari' },
+                { id: 'Nissan', name: 'Nissan' },
+                { id: 'Toyota', name: 'Toyota' }
+            ];
+
+            let addedCount = 0;
+            const currentCats = dm.getCategories();
+
+            defaults.forEach(d => {
+                const exists = currentCats.some(c => c.id === d.id || c.name === d.name);
+                if (!exists) {
+                    dm.saveCategory(d);
+                    addedCount++;
+                }
+            });
+
+            if (addedCount > 0) {
+                alert(`คืนค่าหมวดหมู่สำเร็จ (${addedCount} รายการ)`);
+            } else {
+                alert("หมวดหมู่เริ่มต้นมีอยู่ครบแล้ว");
+            }
+            loadCategories();
+            updateCategorySelect();
+        }
+
+        function editCategory(id) {
+            const categories = dm.getCategories();
+            const c = categories.find(cat => cat.id === id);
+            if (c) {
+                document.getElementById("cat-id").value = c.id;
+                document.getElementById("cat-name").value = c.name;
+            }
+        }
+
+        function updateCategorySelect() {
+            const categories = dm.getCategories();
+            const select = document.getElementById("p-category");
+            select.innerHTML = '<option value="">เลือกหมวดหมู่</option>';
+            categories.forEach(c => {
+                const option = document.createElement("option");
+                option.value = c.id;
+                option.textContent = c.name;
+                option.className = "text-black";
+                select.appendChild(option);
+            });
+        }
+
+
+        // Default load
+        showSection('users');
+    </script>
+
+</body>
+
+</html>

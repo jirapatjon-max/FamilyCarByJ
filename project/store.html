@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family รถมือสอง | Premium Selection</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Prompt', sans-serif;
+            background: radial-gradient(circle at top right, #1e293b, #0f172a, #000000);
+            margin: 0;
+            min-height: 100vh;
+            color: #e2e8f0;
+            padding-bottom: 50px;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(to right, #3b82f6, #2dd4bf);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        nav a {
+            color: #94a3b8;
+            text-decoration: none;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        nav a:hover {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .profile-btn {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa !important;
+            border-color: rgba(59, 130, 246, 0.3) !important;
+        }
+
+        /* Search Section */
+        .header-content {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .search-container {
+            margin: 20px auto;
+            position: relative;
+            max-width: 550px;
+        }
+
+        #searchInput {
+            padding: 15px 25px 15px 50px;
+            width: 100%;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            font-size: 16px;
+            color: white;
+            outline: none;
+        }
+
+        .search-container i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #3b82f6;
+        }
+
+        /* Brand & Cards */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .brand-section {
+            margin-bottom: 60px;
+        }
+
+        .brand-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand-title::after {
+            content: '';
+            height: 2px;
+            flex: 1;
+            background: linear-gradient(to right, #3b82f6, transparent);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.07);
+            border-color: #3b82f6;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        .product-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .price {
+            color: #2dd4bf;
+            font-weight: 700;
+            font-size: 22px;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .buy-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            width: 100%;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .status-tag {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: #e7d31b;
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* สไตล์ Footer สำหรับจัดแนวนอนขนานกัน */
+        footer {
+            margin-top: 80px;
+            padding: 60px 0;
+            background: rgba(15, 23, 42, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* หัวใจหลัก: บังคับให้ลูกข้างในเรียงแถวแนวนอน */
+        .creator-wrapper {
+            display: flex;
+            flex-direction: row;
+            /* บังคับเป็นแนวนอน */
+            justify-content: center;
+            /* จัดกึ่งกลางหน้าจอ */
+            align-items: flex-start;
+            gap: 60px;
+            /* ระยะห่างระหว่างคุณกับเพื่อน */
+            width: 100%;
+        }
+
+        .creator-item {
+            display: flex;
+            flex-direction: column;
+            /* ให้ชื่ออยู่ใต้รูป */
+            align-items: center;
+            text-align: center;
+            width: 200px;
+        }
+
+        .creator-avatar {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+            margin-bottom: 15px;
+            background-color: #fff;
+        }
+
+        .creator-name {
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .creator-id {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        .footer-logo-bar {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #2dd4bf;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div>
+
+
+        <nav>
+            <span class="logo"><i class="fas fa-car-side"></i> FAMILY CAR</span>
+            <div class="nav-links">
+                <a href="profile.html" class="profile-btn">
+                    <i class="fas fa-user-circle"></i> บัญชีของฉัน
+                </a>
+                <a href="index.html">
+                    <i class="fas fa-sign-out-alt"></i> ออกจากระบบ
+                </a>
+            </div>
+        </nav>
+
+        <div class="header-content">
+            <h1 style="font-size: 40px; margin-bottom: 10px;">ค้นหารถในฝันของคุณ</h1>
+            <p style="color: #94a3b8;">รวมรถมือสองคุณภาพพรีเมียม สภาพนางฟ้า ราคาเป็นกันเอง</p>
+
+            <div class="search-container">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" onkeyup="searchCar()"
+                    placeholder="ค้นหายี่ห้อ หรือรุ่นรถที่คุณต้องการ...">
+            </div>
+        </div>
+
+        <footer>
+            <div class="container">
+                <div class="creator-wrapper">
+
+                    <div class="creator-item">
+                        <img src="https://std2018.vec.go.th/web/Student.htm?mode=showImageStu&schoolId=1267&image=68319090003.jpg"
+                            alt="Creator 1" class="creator-avatar">
+                        <div class="creator-name">นายจิรภัทร จรจอหอ</div>
+                        <div class="creator-id">กลุ่ม 9 เลขที่ 3</div>
+                    </div>
+
+                    <div class="creator-item">
+                        <img src="https://i.ibb.co/SDk7kTpn/download.jpg" alt="Creator 2" class="creator-avatar">
+                        <div class="creator-name">รัฐภูมิ เทียมดวง</div>
+                        <div class="creator-id">กลุ่ม 9 เลขที่ 15</div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <div
+            id="dynamic-store-content" class="container">
+        </div>
+
+        <script src="js/data-manager.js"></script>
+        <script>
+            const dm = window.dataManager;
+
+            const currentProducts = dm.getProducts();
+
+            const seedData = {
+                'ferrari-12-cilindri': {
+                    name: 'Ferrari 12 Cilindri',
+                    price: '25900000',
+                    img: 'https://images.unsplash.com/photo-1592198084033-aade902d1aae?w=500',
+                    category: 'Ferrari',
+                    desc: 'Ferrari 12 Cilindri'
+                },
+                'ferrari-488-gtb': {
+                    name: 'Ferrari 488 GTB',
+                    price: '18500000',
+                    img: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=500',
+                    category: 'Ferrari',
+                    desc: 'Ferrari 488 GTB'
+                },
+                'ferrari-purosangue': { name: 'Ferrari Purosangue', price: '12000000', img: 'https://i.ibb.co/wZCdhqT6/download.jpg', category: 'Ferrari', desc: 'Ferrari Purosangue' },
+                'ferrari-sf90': { name: 'Ferrari SF90 Stradale', price: '64900000', img: 'https://i.ibb.co/bMxGh7b2/download-1.jpg', category: 'Ferrari', desc: 'Ferrari SF90 Stradale' },
+                'ferrari-roma': { name: 'Ferrari Roma', price: '42900000', img: 'https://i.ibb.co/xvZjBn0/download-2.jpg', category: 'Ferrari', desc: 'Ferrari Roma' },
+                
+                'nissan-gtr-r32': { name: 'Nissan GTR R32', price: '14900000', img: 'https://i.ibb.co/Kj2ysNjJ/1990-nissan-r32-skyline-gtr.jpg', category: 'Nissan', desc: 'Nissan GTR R32' },
+                'nissan-gtr-r35': { name: 'Nissan GTR R35', price: '22500000', img: 'https://i.ibb.co/zVrY7D8D/download-1.jpg', category: 'Nissan', desc: 'Nissan GTR R35' },
+                'nissan-terra': { name: 'Nissan Terra', price: '1700000', img: 'https://i.ibb.co/hxMj7P7Q/download-4.jpg', category: 'Nissan', desc: 'Nissan Terra' },
+                'nissan-kicks': { name: 'Nissan Kicks e-POWER', price: '2400000', img: 'https://i.ibb.co/Kj2ysNjJ/1990-nissan-r32-skyline-gtr.jpg', category: 'Nissan', desc: 'Nissan Kicks e-POWER' },
+                'nissan-navara': { name: 'Nissan Navara', price: '1900000', img: 'https://i.ibb.co/SwRvWmwm/download-', category: 'Nissan', desc: 'Nissan Navara' },
+
+                'toyota-cross': { name: 'Toyota Corolla Cross', price: '2600000', img: 'https://i.ibb.co/LzhmJBL8/download-2.jpg', category: 'Toyota', desc: 'Toyota Corolla Cross' },
+                'toyota-fortuner': { name: 'Toyota Fortuner', price: '2500000', img: 'https://i.ibb.co/TBVVf247/download-3.jpg', category: 'Toyota', desc: 'Toyota Fortuner' },
+                'toyota-revo': { name: 'Toyota Hilux Revo', price: '1600000', img: 'https://i.ibb.co/6cYdvCqw/download-4.jpg', category: 'Toyota', desc: 'Toyota Hilux Revo' },
+                'toyota-camry': { name: 'Toyota Camry', price: '2900000', img: 'https://i.ibb.co/SwXrBhwV/download-5.jpg', category: 'Toyota', desc: 'Toyota Camry' },
+                'toyota-yaris': { name: 'Toyota Yaris Ativ', price: '2200000', img: 'https://i.ibb.co/RGjB82ky/download-6.jpg', category: 'Toyota', desc: 'Toyota Yaris Ativ' }
+            };
+
+
+            Object.keys(seedData).forEach(id => {
+                currentProducts[id] = seedData[id];
+            });
+            const hasChanges = true;
+
+  
+            const currentCats = dm.getCategories();
+            const defaults = ['Ferrari', 'Nissan', 'Toyota'];
+            let catChanges = false;
+
+            defaults.forEach(defName => {
+
+                const existing = currentCats.find(c => c.name.toLowerCase().trim() === defName.toLowerCase());
+
+
+                if (!existing) {
+                    currentCats.push({ id: defName, name: defName });
+                    catChanges = true;
+                } else if (existing.id !== defName) {
+
+                    existing.id = defName;
+                    existing.name = defName;
+                    catChanges = true;
+                }
+            });
+
+            if (catChanges) {
+                localStorage.setItem(dm.STORAGE_KEYS.CATEGORIES, JSON.stringify(currentCats));
+            }
+
+            if (hasChanges) {
+                localStorage.setItem(dm.STORAGE_KEYS.PRODUCTS, JSON.stringify(currentProducts));
+
+            }
+
+            const user = dm.getCurrentUser();
+            const navLinks = document.querySelector('.nav-links');
+
+            if (user) {
+                let adminLink = '';
+                if (user.role === 'admin') {
+                    adminLink = `<a href="admin.html" style="color: #4ade80; border-color: #4ade80;"><i class="fas fa-tools"></i> Admin Panel</a>`;
+                }
+                navLinks.innerHTML = `
+            ${adminLink}
+            <a href="profile.html" class="profile-btn">
+                <i class="fas fa-user-circle"></i> ${user.name}
+            </a>
+            <a href="#" onclick="logoutUser()">
+                <i class="fas fa-sign-out-alt"></i> ออกจากระบบ
+            </a>
+        `;
+            } else {
+                navLinks.innerHTML = `
+            <a href="index.html" class="profile-btn" style="background: rgba(255, 255, 255, 0.1); color: #fff !important; border-color: #fff !important;">
+                <i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ / สมัครสมาชิก
+            </a>
+        `;
+            }
+
+            function logoutUser() {
+                dm.logout();
+                window.location.reload();
+            }
+
+            function renderProducts() {
+                const products = dm.getProducts();
+                const categories = dm.getCategories();
+                const container = document.getElementById("dynamic-store-content");
+                container.innerHTML = "";
+                const categorizedIds = new Set();
+
+                if (Object.keys(products).length === 0) {
+                    container.innerHTML = '<p class="text-center text-gray-500 mt-10">ยังไม่มีสินค้าในขณะนี้</p>';
+                    return;
+                }
+
+                categories.forEach(cat => {
+                    const catProducts = Object.keys(products)
+                        .map(key => ({ id: key, ...products[key] }))
+                        .filter(p => {
+                            const catIdMatch = p.category === cat.id;
+                            const catNameMatch = p.category && p.category.toLowerCase() === cat.name.toLowerCase();
+                            const nameSearchMatch = !p.category && p.name.toLowerCase().includes(cat.name.toLowerCase());
+
+                            return catIdMatch || catNameMatch || nameSearchMatch;
+                        });
+
+                    catProducts.forEach(p => categorizedIds.add(p.id));
+
+                    const section = document.createElement("div");
+                    section.className = "brand-section";
+
+                    let contentHtml = '';
+                    if (catProducts.length > 0) {
+                        contentHtml = `<div class="product-grid">${catProducts.map(p => createProductCard(p)).join("")}</div>`;
+                    } else {
+                        contentHtml = `<p class="text-gray-500 italic">ยังไม่มีสินค้าในหมวดหมู่นี้</p>`;
+                    }
+
+                    section.innerHTML = `
+                    <h2 class="brand-title">${cat.name.toUpperCase()}</h2>
+                    ${contentHtml}
+                `;
+                    container.appendChild(section);
+                });
+
+
+                const uncategorizedProducts = Object.keys(products)
+                    .map(key => ({ id: key, ...products[key] }))
+                    .filter(p => !categorizedIds.has(p.id));
+
+                if (uncategorizedProducts.length > 0) {
+                    const section = document.createElement("div");
+                    section.className = "brand-section";
+                    section.innerHTML = `
+                    <h2 class="brand-title text-gray-400">อื่นๆ (UNCLASSIFIED)</h2>
+                    <div class="product-grid">
+                        ${uncategorizedProducts.map(p => createProductCard(p)).join("")}
+                    </div>
+                `;
+                    container.appendChild(section);
+                }
+            }
+
+            function createProductCard(p) {
+
+                let displayPrice = Number(p.price);
+                if (isNaN(displayPrice) && typeof p.price === 'string') {
+                    displayPrice = Number(p.price.replace(/,/g, ''));
+                }
+                const formattedPrice = isNaN(displayPrice) ? p.price : displayPrice.toLocaleString();
+
+                return `
+                <div class="product-card" onclick="goToDetail('${p.id}')">
+                    <span class="status-tag">สินค้า</span>
+                    <img src="${p.img}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/150'">
+                    <div class="product-title">${p.name}</div>
+                    <div style="font-size: 14px; color: #94a3b8; margin-bottom: 10px;">ราคาโดยประมาณ</div>
+                    <span class="price">฿${formattedPrice}</span>
+                    <button class="buy-btn">
+                        <i class="fas fa-search-plus"></i> ดูรายละเอียด
+                    </button>
+                </div>
+            `;
+            }
+
+            renderProducts();
+
+            function goToDetail(carId) {
+                window.location.href = `product-detail.html?id=${carId}`;
+            }
+
+            function searchCar() {
+                let input = document.getElementById('searchInput').value.toLowerCase();
+                let cards = document.getElementsByClassName('product-card');
+
+                for (let i = 0; i < cards.length; i++) {
+                    let carName = cards[i].querySelector('.product-title').innerText.toLowerCase();
+                    cards[i].style.display = carName.includes(input) ? "" : "none";
+                }
+            }
+        </script>
+
+</body>
+
+</html>

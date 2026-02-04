@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Mycar Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background: radial-gradient(circle at top right, #1e293b, #0f172a, #000000);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .box {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 420px;
+        }
+
+        h2 {
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 30px;
+            background: linear-gradient(to right, #3b82f6, #2dd4bf);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            box-sizing: border-box;
+            font-size: 15px;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.1);
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 25px 0;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 12px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .divider:not(:empty)::before {
+            margin-right: .5em;
+        }
+
+        .divider:not(:empty)::after {
+            margin-left: .5em;
+        }
+
+        .btn-guest {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .btn-guest:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #fff;
+            color: #fff;
+        }
+
+        .iti {
+            width: 100%;
+            color: #000;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="box">
+        <h2>LOGIN</h2>
+        <form id="loginForm">
+            <div class="input-group"><input type="email" id="email" placeholder="อีเมล" required></div>
+            <div class="input-group"><input type="password" id="password" placeholder="รหัสผ่าน" required></div>
+
+            <button type="submit" class="btn-primary">เข้าสู่ระบบ</button>
+        </form>
+
+        <div class="divider">หรือ</div>
+
+        <a href="store.html" class="btn-guest">
+            เข้าชมหน้าร้านค้าโดยไม่สมัครสมาชิก
+        </a>
+
+        <p class="text-gray-400 text-sm" style="text-align: center; margin-top: 20px;">
+            ยังไม่มีบัญชีสมาชิก?
+            <a href="register.html" class="text-blue-400 font-semibold hover:underline"
+                style="color: #60a5fa;">สมัครสมาชิกใหม่</a>
+        </p>
+    </div>
+
+    <script src="js/data-manager.js"></script>
+    <script>
+        document.getElementById("loginForm").onsubmit = (e) => {
+            e.preventDefault();
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            try {
+                const user = window.dataManager.login(email, password);
+                if (user) {
+                    alert("ยินดีต้อนรับ " + user.name);
+                    if (user.role === 'admin') {
+                        window.location.href = "admin.html";
+                    } else {
+                        window.location.href = "store.html";
+                    }
+                } else {
+                    alert("อีเมล หรือ รหัสผ่านไม่ถูกต้อง");
+                }
+            } catch (error) {
+                console.error(error);
+                alert("เกิดข้อผิดพลาดในการเข้าสู่ระบบ");
+            }
+        };
+    </script>
+
+</body>
+
+</html>
